@@ -244,14 +244,17 @@ body {
   border-block-end: 4px solid var(--brand-color);
 }
 
-/* Todos os painéis ocupam a mesma célula de grid para que hidden="until-found" não crie faixa vazia */
+/* Abas principais */
 .tabs-panels-grid {
-  display: grid;
+  display: block;
 }
 
-.tabs-panels-grid > [role="tabpanel"] {
-  grid-area: 1 / 1;
-  min-inline-size: 0;
+.tabs-panels-grid > [role="tabpanel"][hidden] {
+  display: none !important;
+}
+
+.tabs-panels-grid > [role="tabpanel"]:not([hidden]) {
+  display: block;
 }
 
 /* Espaçamento e visual ficam no wrapper filho (.panel-inner), nunca no elemento com hidden="until-found" */

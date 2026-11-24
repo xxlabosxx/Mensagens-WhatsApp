@@ -166,9 +166,9 @@ function selecionarAba(indice, { focar = false } = {}) {
   tabPanels.forEach((panel, idx) => {
     const ativo = idx === indice;
     if (ativo) {
-      panel.removeAttribute('hidden');
+      panel.hidden = false;
     } else {
-      panel.hidden = 'until-found';
+      panel.hidden = true;
     }
   });
 
