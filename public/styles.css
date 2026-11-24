@@ -1,0 +1,1515 @@
+/* ==========================================================================
+   Tema Visual: Rede IF EcoSol (Verde Floresta & Bege Solidário)
+   Acessibilidade WCAG AA/AAA, Abas com hidden="until-found", Acordeão e Responsividade
+   ========================================================================== */
+
+:root {
+  color-scheme: light dark;
+
+  /* Paleta IF EcoSol - Modo Claro (Bege & Verde) */
+  --brand-color: #1b5e3a;
+  --brand-hover: #13462a;
+  --brand-soft: #dfeee5;
+  --brand-accent: #2d7a4f;
+
+  --bg-page: #f5f0e1;
+  --bg-card: #fcfaf2;
+  --bg-subtle: #ebe4d0;
+  --bg-input: #ffffff;
+
+  --text-primary: #1a241e;
+  --text-secondary: #3f4c43;
+  --text-on-brand: #ffffff;
+
+  /* Borda com contraste >= 3:1 sobre --bg-card (#fcfaf2) para WCAG 1.4.11 */
+  --border-ui: #6e6756;
+  --border-soft: #cfc7b2;
+
+  --focus-ring: #0b57d0;
+
+  --status-success-bg: #e3f3e8;
+  --status-success-border: #1e6b3b;
+  --status-success-text: #124224;
+
+  --status-warn-bg: #fdf1d6;
+  --status-warn-border: #8c5d00;
+  --status-warn-text: #4d3200;
+
+  --status-error-bg: #fce8e6;
+  --status-error-border: #b3261e;
+  --status-error-text: #601410;
+
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --shadow-card: 0 2px 10px rgba(27, 60, 40, 0.07);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --brand-color: #5cd68d;
+    --brand-hover: #7be0a3;
+    --brand-soft: #1a3827;
+    --brand-accent: #3ca368;
+
+    --bg-page: #141c17;
+    --bg-card: #1c2620;
+    --bg-subtle: #26332b;
+    --bg-input: #151e18;
+
+    --text-primary: #f2efe6;
+    --text-secondary: #c8c2b4;
+    --text-on-brand: #0d2115;
+
+    --border-ui: #8a948c;
+    --border-soft: #38473d;
+
+    --focus-ring: #8ab4f8;
+
+    --status-success-bg: #163322;
+    --status-success-border: #5cd68d;
+    --status-success-text: #d7f7e3;
+
+    --status-warn-bg: #362910;
+    --status-warn-border: #f0b849;
+    --status-warn-text: #fde8bc;
+
+    --status-error-bg: #3b1816;
+    --status-error-border: #f28b82;
+    --status-error-text: #fad2cf;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  accent-color: var(--brand-color);
+}
+
+.visually-hidden:where(:not(:focus-within, :active)) {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+.skip-link:focus-visible {
+  position: fixed;
+  inset-block-start: 1rem;
+  inset-inline-start: 1rem;
+  z-index: 9999;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--brand-color);
+  color: var(--text-on-brand);
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+:where(a:any-link, button, input, textarea, select, summary, [tabindex="0"]):focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.container {
+  max-inline-size: 1240px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+/* ==================== CABEÇALHO ==================== */
+.site-header {
+  background-color: #16492d;
+  color: #f8f5ec;
+  padding-block: 1.1rem;
+}
+
+.header-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand-identity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 3.25rem;
+  block-size: 3.25rem;
+  border-radius: 50%;
+  background-color: #f5f0e1;
+  color: #16492d;
+  flex-shrink: 0;
+}
+
+.brand-kicker {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #e4d9b8;
+}
+
+.site-header h1 {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+  line-height: 1.25;
+}
+
+.connection-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  background-color: #f5f0e1;
+  color: #1a241e;
+  border: 2px solid #c8b88a;
+}
+
+/* ==================== BARRA DE ABAS (GUIA `tabs`) ==================== */
+.tabs-bar-shell {
+  background-color: var(--bg-card);
+  border-block-start: 3px solid #c8b88a;
+  border-block-end: 2px solid var(--border-soft);
+}
+
+.app-tablist {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 0.5rem;
+  scroll-snap-type: inline proximity;
+}
+
+.app-tab-btn {
+  position: relative;
+  flex: none;
+  scroll-snap-align: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-block-size: 52px;
+  padding: 0.85rem 1.35rem;
+  font: inherit;
+  font-size: 1.02rem;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.app-tab-btn:hover {
+  color: var(--brand-color);
+  background-color: color-mix(in oklab, var(--bg-subtle) 55%, transparent);
+}
+
+/* Indicador de aba selecionada com borda em ::after (não altera dimensões e funciona em Forced Colors) */
+.app-tab-btn[aria-selected="true"] {
+  color: var(--brand-color);
+}
+
+.app-tab-btn[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  border-block-end: 4px solid var(--brand-color);
+}
+
+/* Todos os painéis ocupam a mesma célula de grid para que hidden="until-found" não crie faixa vazia */
+.tabs-panels-grid {
+  display: grid;
+}
+
+.tabs-panels-grid > [role="tabpanel"] {
+  grid-area: 1 / 1;
+  min-inline-size: 0;
+}
+
+/* Espaçamento e visual ficam no wrapper filho (.panel-inner), nunca no elemento com hidden="until-found" */
+.panel-inner {
+  padding-block: 1.5rem 2rem;
+}
+
+/* Banner de convite para o Guia na Aba 1 */
+.welcome-help-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  margin-block-end: 1.35rem;
+  background-color: var(--brand-soft);
+  border: 2px solid var(--brand-color);
+  border-radius: var(--radius-md);
+}
+
+.welcome-help-strip p {
+  margin: 0;
+}
+
+/* ==================== LAYOUT PRINCIPAL ==================== */
+.layout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+}
+
+@media (min-width: 980px) {
+  .layout-grid {
+    grid-template-columns: minmax(0, 7fr) minmax(340px, 5fr);
+    align-items: start;
+  }
+
+  .sticky-sidebar {
+    position: sticky;
+    inset-block-start: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+.main-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Guia rápido clicável das 4 etapas */
+.steps-overview {
+  background-color: var(--bg-subtle);
+  border: 2px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  padding: 0.85rem;
+}
+
+.steps-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.65rem;
+}
+
+.steps-list a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
+  font-size: 0.92rem;
+}
+
+.steps-list a:hover {
+  border-color: var(--brand-color);
+  background-color: var(--brand-soft);
+}
+
+.steps-list a span {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+/* ==================== CARDS ==================== */
+.card {
+  background-color: var(--bg-card);
+  border: 2px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.card-highlight {
+  border-color: var(--brand-color);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-block-end: 0.75rem;
+}
+
+.step-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: var(--brand-color);
+  color: var(--text-on-brand);
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+.helper-paragraph {
+  margin-block-start: 0;
+  margin-block-end: 1.25rem;
+  color: var(--text-secondary);
+}
+
+.template-helper-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-block-end: 1.25rem;
+}
+
+/* ==================== FORMULÁRIOS E CONTROLES ==================== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.3rem;
+  margin-block-end: 1.25rem;
+}
+
+label {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.required-mark {
+  color: var(--status-error-border);
+  font-weight: 700;
+}
+
+.field-hint {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.field-error {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--status-error-text);
+  background-color: var(--status-error-bg);
+  border: 1px solid var(--status-error-border);
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.375rem;
+}
+
+input[type="text"],
+input[type="search"],
+input[type="url"],
+textarea,
+select {
+  font: inherit;
+  font-size: max(1rem, 1em);
+  padding: 0.7rem 0.85rem;
+  min-block-size: 48px;
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 2px solid var(--border-ui);
+  border-radius: var(--radius-md);
+  inline-size: 100%;
+}
+
+textarea {
+  resize: vertical;
+  min-block-size: 130px;
+}
+
+@media (pointer: coarse) {
+  input[type="text"],
+  input[type="search"],
+  input[type="url"],
+  select,
+  .btn {
+    min-block-size: 52px;
+  }
+}
+
+input:user-invalid,
+textarea:user-invalid {
+  border-color: var(--status-error-border);
+  background-color: color-mix(in oklab, var(--bg-input) 92%, var(--status-error-border));
+}
+
+.fieldset-box {
+  border: 2px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.15rem;
+  margin-block-end: 1.25rem;
+  background-color: color-mix(in oklab, var(--bg-card) 70%, var(--bg-subtle));
+}
+
+.fieldset-box legend {
+  font-weight: 700;
+  padding-inline: 0.5rem;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.radio-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.radio-option input[type="radio"] {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  margin-block-start: 0.2rem;
+  flex-shrink: 0;
+}
+
+.radio-option label {
+  font-weight: 400;
+  cursor: pointer;
+}
+
+/* Checkbox com accent-color + fallback @supports not */
+.brand-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  cursor: pointer;
+  padding-block: 0.35rem;
+}
+
+@supports (accent-color: var(--brand-color)) {
+  .brand-checkbox-label input[type="checkbox"].visually-hidden {
+    position: static !important;
+    clip-path: none !important;
+    overflow: visible !important;
+    inline-size: 1.35rem !important;
+    block-size: 1.35rem !important;
+    margin: 0 !important;
+    flex-shrink: 0;
+  }
+}
+
+@supports not (accent-color: var(--brand-color)) {
+  form input[type="checkbox"].visually-hidden {
+    position: absolute !important;
+    clip-path: inset(50%) !important;
+    overflow: hidden !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  .brand-checkbox-label {
+    position: relative;
+    padding-inline-start: 2rem;
+  }
+
+  input[type="checkbox"] + span::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    border: 2px solid var(--border-ui);
+    background: var(--bg-input);
+    border-radius: 4px;
+  }
+
+  input[type="checkbox"]:focus-visible + span::before {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  input[type="checkbox"]:checked + span::before {
+    background-color: var(--brand-color);
+    border-color: var(--brand-color);
+  }
+
+  input[type="checkbox"]:checked + span::after {
+    content: "✓";
+    position: absolute;
+    inset-inline-start: 0.25rem;
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+    color: var(--text-on-brand);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  progress {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    background: var(--bg-subtle);
+    block-size: 14px;
+    border-radius: 999px;
+  }
+
+  progress::-webkit-progress-bar {
+    background-color: var(--bg-subtle);
+    border-radius: 999px;
+  }
+
+  progress::-webkit-progress-value {
+    background-color: var(--brand-color);
+    border-radius: 999px;
+  }
+
+  progress::-moz-progress-bar {
+    background-color: var(--brand-color);
+    border-radius: 999px;
+  }
+}
+
+/* ==================== BOTÕES ==================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+  min-block-size: 48px;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-primary {
+  background-color: var(--brand-color);
+  color: var(--text-on-brand);
+  border-color: var(--brand-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--brand-hover);
+  border-color: var(--brand-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+  border-color: var(--border-ui);
+}
+
+.btn-secondary:hover {
+  background-color: color-mix(in oklab, var(--bg-subtle) 80%, var(--brand-color));
+}
+
+.btn-outline-danger {
+  background-color: var(--status-error-bg);
+  color: var(--status-error-text);
+  border-color: var(--status-error-border);
+}
+
+.btn-small {
+  min-block-size: 40px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.9rem;
+}
+
+.btn-large {
+  font-size: 1.08rem;
+  padding: 0.85rem 1.65rem;
+}
+
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.split-actions {
+  justify-content: space-between;
+}
+
+/* ==================== ALERTAS, PAREAMENTO E COLUNAS DETECTADAS ==================== */
+.alert-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 2px solid;
+  margin-block: 1rem;
+}
+
+[hidden]:not([hidden="until-found"]) {
+  display: none !important;
+}
+
+.alert-success {
+  background-color: var(--status-success-bg);
+  border-color: var(--status-success-border);
+  color: var(--status-success-text);
+}
+
+.alert-error {
+  background-color: var(--status-error-bg);
+  border-color: var(--status-error-border);
+  color: var(--status-error-text);
+}
+
+.alert-content p {
+  margin: 0.2rem 0 0;
+}
+
+.detected-columns-banner {
+  margin-block-start: 1rem;
+  padding: 0.7rem 1rem;
+  background-color: var(--status-success-bg);
+  color: var(--status-success-text);
+  border: 1px solid var(--status-success-border);
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+}
+
+.pairing-display {
+  margin-block-start: 1.25rem;
+  padding: 1.25rem;
+  background-color: var(--bg-subtle);
+  border: 2px dashed var(--brand-color);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.pairing-code-badge {
+  display: inline-block;
+  margin-block: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  background-color: var(--bg-input);
+  color: var(--brand-color);
+  border: 3px solid var(--brand-color);
+  border-radius: var(--radius-md);
+}
+
+.pairing-instructions {
+  text-align: start;
+  max-inline-size: 540px;
+  margin-inline: auto;
+}
+
+.qr-frame {
+  display: inline-block;
+  padding: 0.75rem;
+  background: #ffffff;
+  border: 3px solid var(--brand-color);
+  border-radius: var(--radius-md);
+}
+
+/* ==================== TABELA RESPONSIVA DE CONTATOS ==================== */
+.advanced-details {
+  margin-block-end: 1.25rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.9rem;
+  background-color: color-mix(in oklab, var(--bg-card) 55%, var(--bg-subtle));
+}
+
+.advanced-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--brand-color);
+  padding-block: 0.35rem;
+}
+
+.details-body {
+  padding-block-start: 0.75rem;
+}
+
+.columns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.85rem;
+}
+
+.manual-contact-form {
+  margin-block-start: 1.35rem;
+}
+
+.manual-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.85rem;
+  align-items: end;
+}
+
+.manual-contact-grid .form-group {
+  margin-block-end: 0;
+}
+
+.contacts-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-block: 1.15rem 0.65rem;
+}
+
+.contacts-bulk-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.table-wrapper {
+  overflow: auto;
+  max-inline-size: 100%;
+  max-block-size: min(440px, 70vh);
+  container-type: inline-size;
+  border: 2px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-input);
+}
+
+#contacts-table {
+  inline-size: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: start;
+  --label-1: "Nome";
+  --label-2: "Enviar?";
+  --label-3: "WhatsApp";
+  --label-4: "Situação";
+}
+
+#contacts-table thead {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
+  background-color: var(--bg-subtle);
+}
+
+#contacts-table th,
+#contacts-table td {
+  padding: 0.75rem 0.9rem;
+  border-block-end: 1px solid var(--border-soft);
+  vertical-align: middle;
+}
+
+#contacts-table thead th {
+  font-weight: 700;
+  border-block-end: 2px solid var(--border-ui);
+}
+
+#contacts-table tbody th {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+  background-color: var(--bg-input);
+  font-weight: 600;
+}
+
+#contacts-table tbody tr:hover th,
+#contacts-table tbody tr:hover td {
+  background-color: color-mix(in oklab, var(--bg-input) 88%, var(--brand-soft));
+}
+
+@container (width < 600px) {
+  #contacts-table,
+  #contacts-table thead,
+  #contacts-table tbody,
+  #contacts-table tr,
+  #contacts-table th,
+  #contacts-table td {
+    display: block;
+  }
+
+  #contacts-table thead {
+    display: none;
+  }
+
+  #contacts-table tr {
+    margin-block-end: 1rem;
+    border: 2px solid var(--border-soft);
+    border-radius: var(--radius-md);
+  }
+
+  #contacts-table tbody th {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    background-color: var(--bg-subtle);
+    border-block-end: 2px solid var(--border-soft);
+  }
+
+  #contacts-table td:nth-child(2)::before {
+    content: var(--label-2) ": ";
+    font-weight: 700;
+  }
+
+  #contacts-table td:nth-child(3)::before {
+    content: var(--label-3) ": ";
+    font-weight: 700;
+  }
+
+  #contacts-table td:nth-child(4)::before {
+    content: var(--label-4) ": ";
+    font-weight: 700;
+  }
+}
+
+.row-check {
+  inline-size: 1.3rem;
+  block-size: 1.3rem;
+  cursor: pointer;
+}
+
+/* ==================== MENSAGEM E UPLOAD DE IMAGEM ==================== */
+.label-with-action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.tag-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.image-upload-area {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.15rem;
+  margin-block-start: 0.75rem;
+}
+
+.current-image-thumb img {
+  display: block;
+  inline-size: 110px;
+  block-size: 110px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border-ui);
+}
+
+.image-status-name {
+  margin-block: 0 0.5rem;
+}
+
+.image-buttons-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.pause-inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-block-start: 0.65rem;
+}
+
+.pause-inputs-grid .form-group {
+  margin-block-end: 0;
+}
+
+/* ==================== ETAPA 4: TESTE E DISPARO ==================== */
+.test-input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.test-input-row input {
+  flex: 1 1 220px;
+}
+
+.section-divider {
+  border: none;
+  border-block-start: 2px solid var(--border-soft);
+  margin-block: 1.5rem;
+}
+
+.final-launch-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem;
+  background-color: var(--brand-soft);
+  border: 2px solid var(--brand-color);
+  border-radius: var(--radius-md);
+}
+
+.final-launch-box h3 {
+  margin: 0 0 0.25rem;
+}
+
+.final-launch-box p {
+  margin: 0;
+}
+
+/* ==================== SIMULADOR DE CELULAR WHATSAPP ==================== */
+.wa-phone-mockup {
+  border: 2px solid var(--border-ui);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: #e5ddd5;
+  color: #111b21;
+  margin-block-start: 0.85rem;
+}
+
+.wa-phone-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #075e54;
+  color: #ffffff;
+  padding: 0.65rem 1rem;
+}
+
+.wa-avatar {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: 50%;
+  background-color: #c8b88a;
+  color: #16492d;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wa-contact-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.wa-contact-sub {
+  font-size: 0.78rem;
+  opacity: 0.9;
+}
+
+.wa-chat-area {
+  padding: 1rem;
+  background-color: #efeae2;
+}
+
+.wa-bubble {
+  background-color: #d9fdd3;
+  color: #111b21;
+  border-radius: 0.65rem;
+  padding: 0.55rem;
+  max-inline-size: 92%;
+  margin-inline-start: auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14);
+}
+
+.wa-bubble-img img {
+  display: block;
+  inline-size: 100%;
+  max-block-size: 210px;
+  object-fit: cover;
+  border-radius: 0.45rem;
+  margin-block-end: 0.5rem;
+}
+
+.wa-bubble-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.93rem;
+  padding-inline: 0.25rem;
+}
+
+.wa-bubble-time {
+  text-align: end;
+  font-size: 0.72rem;
+  color: #4a5960;
+  margin-block-start: 0.25rem;
+}
+
+/* ==================== PROGRESSO E LOGS ==================== */
+.progress-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-block-end: 0.85rem;
+}
+
+.dispatch-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-ui);
+}
+
+.progress-bar-block {
+  margin-block-end: 1rem;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 0.92rem;
+  margin-block-end: 0.35rem;
+}
+
+progress {
+  inline-size: 100%;
+  block-size: 1.1rem;
+}
+
+.pause-countdown-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  background-color: var(--status-warn-bg);
+  color: var(--status-warn-text);
+  border: 2px solid var(--status-warn-border);
+  border-radius: var(--radius-md);
+  margin-block-end: 1rem;
+  font-size: 0.92rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  margin-block-end: 1rem;
+}
+
+.stat-item {
+  padding: 0.65rem;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border-soft);
+  text-align: center;
+  background-color: var(--bg-subtle);
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.35rem;
+  margin-block-start: 0.15rem;
+}
+
+.active-dispatch-controls {
+  display: flex;
+  gap: 0.65rem;
+  margin-block-end: 1rem;
+}
+
+.active-dispatch-controls .btn {
+  flex: 1;
+}
+
+.log-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block-end: 0.5rem;
+}
+
+.log-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.log-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-block-size: 260px;
+  overflow-y: auto;
+  border: 2px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-input);
+}
+
+.log-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  border-block-end: 1px solid var(--border-soft);
+  font-size: 0.88rem;
+}
+
+.log-time {
+  font-weight: 700;
+  margin-inline-end: 0.4rem;
+  color: var(--text-secondary);
+}
+
+/* ==================== ABA 2: GUIA PASSO A PASSO E ACORDEÃO (`accordion`) ==================== */
+.guide-container {
+  max-inline-size: 920px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.guide-hero-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.guide-hero h2 {
+  margin-block: 0.5rem;
+  font-size: clamp(1.35rem, 2.5vw, 1.7rem);
+}
+
+.guide-quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.guide-tip-callout,
+.guide-callout-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.95rem 1.15rem;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-subtle);
+  border-inline-start: 5px solid var(--brand-color);
+  margin-block-start: 1rem;
+}
+
+.guide-callout-warn {
+  background-color: var(--status-warn-bg);
+  color: var(--status-warn-text);
+  border-inline-start-color: var(--status-warn-border);
+}
+
+.accordion-header-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-block-end: 1.1rem;
+}
+
+/* Toggle Abrir/Recolher todos conforme guia `accordion` */
+[command="--toggle-all"][aria-expanded="true"] .expand,
+[command="--toggle-all"][aria-expanded="false"] .collapse {
+  display: none;
+}
+
+.accordion > details {
+  border: 2px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  margin-block-end: 0.9rem;
+  background-color: var(--bg-input);
+  overflow: hidden;
+}
+
+.accordion > details[open] {
+  border-color: var(--brand-color);
+}
+
+.accordion > details > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.05rem 1.15rem;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background-color: color-mix(in oklab, var(--bg-card) 55%, var(--bg-subtle));
+  cursor: pointer;
+}
+
+.accordion > details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Marcador posicionado diretamente ANTES do texto (melhor leitura para baixa visão e escaneamento vertical) */
+.accordion > details > summary::before {
+  content: "";
+  inline-size: 1.1em;
+  block-size: 1.1em;
+  flex-shrink: 0;
+  background-color: var(--brand-color);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat center / contain;
+  rotate: -90deg;
+}
+
+.accordion > details[open] > summary::before {
+  rotate: 0deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .accordion > details > summary::before {
+    transition: rotate 0.2s ease;
+  }
+
+  .accordion > details::details-content {
+    transition: block-size, content-visibility, display;
+    transition-duration: 0.28s;
+    transition-timing-function: ease-in-out;
+    transition-behavior: allow-discrete;
+  }
+}
+
+.accordion > details::details-content {
+  interpolate-size: allow-keywords;
+  overflow: clip;
+  contain: layout;
+}
+
+.accordion > details:not([open])::details-content {
+  block-size: 0;
+}
+
+.accordion-content {
+  padding: 1.15rem 1.35rem 1.35rem;
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.accordion-content p:first-child {
+  margin-block-start: 0;
+}
+
+.guide-steps-ol,
+.guide-checklist {
+  padding-inline-start: 1.4rem;
+}
+
+.guide-steps-ol li,
+.guide-checklist li {
+  margin-block-end: 0.6rem;
+}
+
+/* Ilustração de Planilha dentro do Guia */
+.sheet-mockup-box {
+  margin-block: 1rem 1.25rem;
+  padding: 1rem;
+  background-color: var(--bg-subtle);
+  border: 2px solid var(--border-soft);
+  border-radius: var(--radius-md);
+}
+
+.sheet-mockup-caption {
+  margin: 0 0 0.65rem;
+  font-weight: 700;
+}
+
+.sheet-grid-scroll {
+  overflow-x: auto;
+}
+
+.sheet-example-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  background-color: var(--bg-input);
+  font-size: 0.95rem;
+}
+
+.sheet-example-table th,
+.sheet-example-table td {
+  border: 1px solid var(--border-ui);
+  padding: 0.55rem 0.75rem;
+  text-align: start;
+}
+
+.sheet-example-table thead th,
+.sheet-row-num {
+  background-color: var(--bg-subtle);
+  font-weight: 700;
+  text-align: center;
+}
+
+.sheet-header-row td {
+  background-color: var(--brand-soft);
+}
+
+.faq-dl dt {
+  font-weight: 700;
+  margin-block-start: 1rem;
+  color: var(--brand-color);
+}
+
+.faq-dl dt:first-child {
+  margin-block-start: 0;
+}
+
+.faq-dl dd {
+  margin-inline-start: 0;
+  margin-block-start: 0.3rem;
+  padding-block-end: 0.85rem;
+  border-block-end: 1px solid var(--border-soft);
+}
+
+.faq-dl dd:last-child {
+  border-block-end: none;
+  padding-block-end: 0;
+}
+
+/* ==================== MODAL NATIVO <dialog> ==================== */
+dialog:modal {
+  overscroll-behavior: contain;
+  max-inline-size: 540px;
+  inline-size: calc(100% - 2rem);
+  border: 3px solid var(--brand-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+}
+
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background-color: rgba(15, 32, 22, 0.62);
+}
+
+dialog[open] {
+  display: block;
+}
+
+dialog h1 {
+  margin-block-start: 0;
+  font-size: 1.35rem;
+}
+
+.modal-checklist {
+  background-color: var(--bg-subtle);
+  padding: 0.85rem 1.25rem 0.85rem 2.25rem;
+  border-radius: var(--radius-md);
+  margin-block: 1rem 1.35rem;
+}
+
+.dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* ==================== RODAPÉ ==================== */
+.site-footer {
+  margin-block-start: 2rem;
+  padding-block: 1.5rem;
+  background-color: var(--bg-subtle);
+  border-block-start: 2px solid var(--border-soft);
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0.25rem 0;
+}
+
+.footer-note {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* ==================== FORCED COLORS MODE (Alto Contraste) ==================== */
+@media (forced-colors: active) {
+  .card,
+  .btn,
+  input,
+  textarea,
+  select,
+  .table-wrapper,
+  .connection-pill,
+  dialog:modal,
+  .accordion > details {
+    border: 2px solid CanvasText;
+  }
+
+  .btn-primary {
+    background-color: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
+
+  .app-tab-btn[aria-selected="true"]::after {
+    border-block-end-color: Highlight;
+  }
+
+  .accordion > details > summary::before {
+    background-color: CanvasText;
+  }
+
+  :where(a:any-link, button, input, textarea, select, summary, [tabindex="0"]):focus-visible {
+    outline: 3px solid Highlight;
+  }
+}

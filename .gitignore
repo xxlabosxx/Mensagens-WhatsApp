@@ -1,0 +1,5 @@
+node_modules/
+sessao_whatsapp/
+uploads/
+config.json
+.env

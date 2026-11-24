@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disparador de Mensagens | Rede IF EcoSol</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <a href="#main-heading" class="skip-link visually-hidden">Pular para o conteúdo principal</a>
+
+  <!-- Regiões Live Centralizadas para Leitores de Tela -->
+  <div id="live-polite" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <div id="live-assertive" class="visually-hidden" role="alert" aria-atomic="true"></div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand-identity">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.07-1.35C8.52 21.5 10.2 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <path d="M9 9h.01M15 9h.01"/>
+          </svg>
+        </div>
+        <div>
+          <span class="brand-kicker">Economia Solidária • Rede IF EcoSol</span>
+          <h1 id="main-heading" tabindex="-1">Central de Comunicação e Disparos</h1>
+        </div>
+      </div>
+
+      <div class="connection-pill" id="header-connection-pill" data-state="disconnected">
+        <span class="status-icon" id="header-status-icon" aria-hidden="true">🔴</span>
+        <span class="status-label" id="header-status-text">WhatsApp Desconectado</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Barra de Abas Principais (Painel de Disparo vs. Guia Passo a Passo e Dúvidas) -->
+  <div class="tabs-bar-shell">
+    <div class="container">
+      <div
+        class="app-tablist"
+        role="tablist"
+        focusgroup="tablist nomemory"
+        aria-label="Seções da Central de Comunicação"
+      >
+        <button
+          type="button"
+          id="tab-painel"
+          role="tab"
+          aria-selected="true"
+          focusgroupstart
+          class="app-tab-btn"
+        >
+          <span aria-hidden="true">📨</span>
+          <span>Painel de Disparo</span>
+        </button>
+
+        <button
+          type="button"
+          id="tab-ajuda"
+          role="tab"
+          aria-selected="false"
+          class="app-tab-btn"
+        >
+          <span aria-hidden="true">📘</span>
+          <span>Guia Passo a Passo e Dúvidas</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <main class="container tabs-panels-grid">
+    <!-- ======================================================================
+         ABA 1: PAINEL DE DISPARO (4 ETAPAS EM ORDEM LÓGICA)
+         ====================================================================== -->
+    <div id="panel-painel" role="tabpanel" aria-labelledby="tab-painel">
+      <div class="panel-inner">
+        <div class="welcome-help-strip">
+          <p>
+            <strong>Primeira vez usando ou com dúvida sobre como preparar sua planilha?</strong>
+            Consulte o manual ilustrado com explicações passo a passo na aba de ajuda.
+          </p>
+          <button type="button" id="btn-ir-para-ajuda" class="btn btn-secondary btn-small">
+            📘 Abrir Guia Passo a Passo
+          </button>
+        </div>
+
+        <div class="layout-grid">
+          <div class="main-column">
+            <!-- Resumo visual das 4 etapas em ordem -->
+            <nav aria-label="Etapas do envio" class="steps-overview">
+              <ol class="steps-list">
+                <li><a href="#etapa-1"><strong>1. Conectar</strong><span>Vincule seu WhatsApp</span></a></li>
+                <li><a href="#etapa-2"><strong>2. Contatos</strong><span>Carregue sua planilha</span></a></li>
+                <li><a href="#etapa-3"><strong>3. Mensagem</strong><span>Escreva e anexe imagem</span></a></li>
+                <li><a href="#etapa-4"><strong>4. Enviar</strong><span>Teste e inicie o disparo</span></a></li>
+              </ol>
+            </nav>
+
+            <!-- ==================== ETAPA 1: CONEXÃO WHATSAPP ==================== -->
+            <section class="card" id="etapa-1" aria-labelledby="step1-heading">
+              <div class="card-header">
+                <span class="step-badge">Etapa 1</span>
+                <h2 id="step1-heading">Conectar o seu WhatsApp</h2>
+              </div>
+
+              <p class="helper-paragraph">
+                Conecte o celular que fará os envios das mensagens. Se você terminar de usar em um computador compartilhado, lembre-se de clicar em <em>Desconectar</em>.
+              </p>
+
+              <div id="wa-connected-box" class="alert-box alert-success" hidden>
+                <span class="alert-icon" aria-hidden="true">✅</span>
+                <div class="alert-content">
+                  <strong>WhatsApp conectado e pronto!</strong>
+                  <p id="wa-connected-detail">Aparelho conectado ao sistema.</p>
+                </div>
+                <button type="button" id="btn-wa-disconnect" class="btn btn-outline-danger">
+                  Desconectar / Trocar Celular
+                </button>
+              </div>
+
+              <form id="form-conexao" action="/api/whatsapp/conectar" method="POST" aria-labelledby="step1-heading" novalidate>
+                <fieldset class="fieldset-box">
+                  <legend>Escolha como prefere conectar seu celular</legend>
+
+                  <div class="radio-group">
+                    <div class="radio-option">
+                      <input type="radio" id="metodo-codigo" name="metodo" value="codigo" checked>
+                      <label for="metodo-codigo">
+                        <strong>Código de 8 letras/números (Recomendado)</strong> — Mais simples: você digita o código no WhatsApp sem precisar usar a câmera.
+                      </label>
+                    </div>
+
+                    <div class="radio-option">
+                      <input type="radio" id="metodo-qr" name="metodo" value="qr">
+                      <label for="metodo-qr">
+                        <strong>QR Code na tela</strong> — Igual ao WhatsApp Web: aponte a câmera do celular para a tela.
+                      </label>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <div id="campo-numero-pareamento" class="form-group">
+                  <label for="numeroConectar">
+                    Número do seu WhatsApp (com DDD): <span class="required-mark" aria-hidden="true">*</span>
+                  </label>
+                  <span id="numeroConectar-hint" class="field-hint">
+                    Digite apenas números (com DDD, ou com 55 na frente). Exemplo fictício: <code>5518999999999</code> ou <code>18999999999</code>.
+                  </span>
+                  <input
+                    type="text"
+                    id="numeroConectar"
+                    name="numeroConectar"
+                    inputmode="numeric"
+                    autocomplete="tel"
+                    autocorrect="off"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    pattern="\d{10,15}"
+                    placeholder="Ex: 5518999999999"
+                    aria-describedby="numeroConectar-hint numeroConectar-error"
+                    required
+                  >
+                  <span id="numeroConectar-error" class="field-error" hidden>
+                    <span aria-hidden="true">❌</span> Digite seu telefone com DDD usando apenas números (ex: 18999999999).
+                  </span>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" id="btn-gerar-conexao" class="btn btn-primary">
+                    Gerar Código para Conectar WhatsApp
+                  </button>
+                </div>
+              </form>
+
+              <div id="painel-pareamento" class="pairing-display" hidden>
+                <h3>Digite este código no seu WhatsApp:</h3>
+                <div class="pairing-code-badge" id="pairing-code-value">----</div>
+                <ol class="pairing-instructions">
+                  <li>Abra o <strong>WhatsApp</strong> no celular.</li>
+                  <li>Toque em <strong>Aparelhos conectados</strong> &gt; <strong>Conectar um aparelho</strong>.</li>
+                  <li>Na parte de baixo da tela, toque em <strong>"Conectar com número de telefone"</strong> e digite o código acima.</li>
+                </ol>
+              </div>
+
+              <div id="painel-qrcode" class="pairing-display" hidden>
+                <h3>Aponte a câmera do WhatsApp para o QR Code abaixo:</h3>
+                <div class="qr-frame">
+                  <img id="qr-image" src="" alt="QR Code para conectar o WhatsApp" width="260" height="260">
+                </div>
+                <p class="field-hint">No celular: WhatsApp &gt; Aparelhos conectados &gt; Conectar um aparelho.</p>
+              </div>
+
+              <div id="wa-error-box" class="alert-box alert-error" hidden>
+                <span class="alert-icon" aria-hidden="true">❌</span>
+                <span id="wa-error-text"></span>
+              </div>
+            </section>
+
+            <!-- ==================== ETAPA 2: LISTA DE CONTATOS ==================== -->
+            <section class="card" id="etapa-2" aria-labelledby="step2-heading">
+              <div class="card-header">
+                <span class="step-badge">Etapa 2</span>
+                <h2 id="step2-heading">Carregar Lista de Contatos</h2>
+              </div>
+
+              <p class="helper-paragraph">
+                Você pode trazer sua lista do <strong>Google Planilhas</strong>, enviar um arquivo <strong>.CSV do Excel</strong> ou adicionar contatos manualmente.
+              </p>
+
+              <div class="template-helper-row">
+                <a href="/api/planilha/modelo" download class="btn btn-secondary btn-small">
+                  ⬇️ Baixar Planilha Modelo Pronta (.CSV)
+                </a>
+                <button type="button" id="btn-ajuda-planilha" class="btn btn-secondary btn-small">
+                  ❓ Não sei montar a planilha (Ver passo a passo)
+                </button>
+              </div>
+
+              <form id="form-planilha" action="/api/planilha/carregar" method="POST" aria-labelledby="step2-heading" novalidate>
+                <div class="form-group">
+                  <label for="spreadsheetUrl">
+                    Link da sua Planilha do Google Sheets: <span class="required-mark" aria-hidden="true">*</span>
+                  </label>
+                  <span id="spreadsheetUrl-hint" class="field-hint">
+                    A planilha precisa estar compartilhada como <strong>"Qualquer pessoa com o link"</strong> (Leitor). Cole o endereço completo abaixo.
+                  </span>
+                  <input
+                    type="text"
+                    id="spreadsheetUrl"
+                    name="spreadsheetUrl"
+                    autocorrect="off"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    placeholder="https://docs.google.com/spreadsheets/d/..."
+                    aria-describedby="spreadsheetUrl-hint spreadsheetUrl-error"
+                    required
+                  >
+                  <span id="spreadsheetUrl-error" class="field-error" hidden>
+                    <span aria-hidden="true">❌</span> Cole o endereço completo da sua Planilha do Google antes de carregar.
+                  </span>
+                </div>
+
+                <details class="advanced-details">
+                  <summary>Configuração das colunas da planilha (Padrão: Detecção Automática)</summary>
+                  <div class="details-body">
+                    <fieldset class="fieldset-box">
+                      <legend>Como identificar Nome e Telefone na planilha?</legend>
+                      <div class="radio-group">
+                        <div class="radio-option">
+                          <input type="radio" id="modo-colunas-auto" name="modoColunas" value="auto" checked>
+                          <label for="modo-colunas-auto">
+                            <strong>Automático (Recomendado)</strong> — O sistema procura sozinho as colunas chamadas "Nome", "WhatsApp/Telefone" e "Status".
+                          </label>
+                        </div>
+                        <div class="radio-option">
+                          <input type="radio" id="modo-colunas-manual" name="modoColunas" value="manual">
+                          <label for="modo-colunas-manual">
+                            <strong>Escolher as letras das colunas manualmente</strong> — Use se a sua planilha tiver nomes diferentes no cabeçalho.
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+
+                    <div id="painel-colunas-manuais" class="columns-grid" hidden>
+                      <div class="form-group">
+                        <label for="colNome">Onde está o Nome?</label>
+                        <select id="colNome" name="colNome">
+                          <option value="0" selected>Coluna A</option>
+                          <option value="1">Coluna B</option>
+                          <option value="2">Coluna C</option>
+                          <option value="3">Coluna D</option>
+                          <option value="4">Coluna E</option>
+                          <option value="5">Coluna F</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="colTelefone">Onde está o WhatsApp?</label>
+                        <select id="colTelefone" name="colTelefone">
+                          <option value="0">Coluna A</option>
+                          <option value="1" selected>Coluna B</option>
+                          <option value="2">Coluna C</option>
+                          <option value="3">Coluna D</option>
+                          <option value="4">Coluna E</option>
+                          <option value="5">Coluna F</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="colStatus">Coluna de Status (Opcional):</label>
+                        <select id="colStatus" name="colStatus">
+                          <option value="-1" selected>Não usar coluna de status</option>
+                          <option value="0">Coluna A</option>
+                          <option value="1">Coluna B</option>
+                          <option value="2">Coluna C</option>
+                          <option value="3">Coluna D</option>
+                          <option value="4">Coluna E</option>
+                          <option value="5">Coluna F</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="statusIgnorar">Palavra para pular contato:</label>
+                        <input type="text" id="statusIgnorar" name="statusIgnorar" value="enviado">
+                      </div>
+                    </div>
+                  </div>
+                </details>
+
+                <div class="form-actions split-actions">
+                  <button type="submit" id="btn-carregar-planilha" class="btn btn-primary">
+                    Carregar Contatos da Planilha Google
+                  </button>
+
+                  <div class="csv-upload-wrapper">
+                    <label for="input-csv-file" class="btn btn-secondary">
+                      Ou Abrir Arquivo (.CSV) do Computador
+                    </label>
+                    <input type="file" id="input-csv-file" name="csv" accept=".csv,text/csv" class="visually-hidden">
+                  </div>
+                </div>
+              </form>
+
+              <div id="planilha-error-box" class="alert-box alert-error" hidden>
+                <span class="alert-icon" aria-hidden="true">❌</span>
+                <span id="planilha-error-text"></span>
+              </div>
+
+              <div id="planilha-colunas-info" class="detected-columns-banner" hidden></div>
+
+              <!-- Conferência da Lista Carregada -->
+              <div class="contacts-toolbar">
+                <div class="contacts-summary" id="contacts-summary-text">
+                  Nenhum contato carregado ainda. Cole o link da planilha acima, envie um CSV ou adicione alguém abaixo.
+                </div>
+                <div class="contacts-bulk-btns">
+                  <button type="button" id="btn-marcar-pendentes" class="btn btn-small btn-secondary">
+                    Marcar Pendentes
+                  </button>
+                  <button type="button" id="btn-desmarcar-todos" class="btn btn-small btn-secondary">
+                    Desmarcar Todos
+                  </button>
+                  <button type="button" id="btn-limpar-lista" class="btn btn-small btn-secondary">
+                    Limpar Lista
+                  </button>
+                </div>
+              </div>
+
+              <div tabindex="0" role="region" aria-labelledby="contacts-table-caption" class="table-wrapper">
+                <table id="contacts-table">
+                  <caption id="contacts-table-caption" class="visually-hidden">
+                    Lista de contatos carregados para o disparo de mensagens
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Nome da Pessoa</th>
+                      <th scope="col">Enviar?</th>
+                      <th scope="col">WhatsApp</th>
+                      <th scope="col">Situação</th>
+                    </tr>
+                  </thead>
+                  <tbody id="contacts-tbody">
+                    <tr>
+                      <th scope="row">Lista vazia</th>
+                      <td>—</td>
+                      <td>—</td>
+                      <td>Carregue uma planilha ou adicione uma pessoa abaixo.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Adicionar contato avulso manualmente (logo após a lista) -->
+              <form id="form-contato-manual" action="#adicionar-contato" method="POST" aria-labelledby="manual-contact-legend" class="manual-contact-form" novalidate>
+                <fieldset class="fieldset-box">
+                  <legend id="manual-contact-legend">Quer adicionar alguém manualmente (sem planilha)?</legend>
+                  <div class="manual-contact-grid">
+                    <div class="form-group">
+                      <label for="manualNome">Nome da pessoa:</label>
+                      <input type="text" id="manualNome" name="manualNome" autocomplete="name" placeholder="Ex: Prof. Maria">
+                    </div>
+                    <div class="form-group">
+                      <label for="manualTelefone">WhatsApp com DDD: <span class="required-mark" aria-hidden="true">*</span></label>
+                      <input
+                        type="text"
+                        id="manualTelefone"
+                        name="manualTelefone"
+                        inputmode="numeric"
+                        autocomplete="tel"
+                        autocorrect="off"
+                        autocapitalize="none"
+                        spellcheck="false"
+                        placeholder="Ex: 18999999999"
+                        required
+                      >
+                    </div>
+                    <div class="form-group manual-btn-col">
+                      <button type="submit" class="btn btn-secondary">
+                        + Adicionar na Lista
+                      </button>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </section>
+
+            <!-- ==================== ETAPA 3: MENSAGEM E IMAGEM ==================== -->
+            <section class="card" id="etapa-3" aria-labelledby="step3-heading">
+              <div class="card-header">
+                <span class="step-badge">Etapa 3</span>
+                <h2 id="step3-heading">Escrever a Mensagem e Anexar Imagem</h2>
+              </div>
+
+              <form id="form-mensagem" action="/api/config" method="POST" aria-labelledby="step3-heading" novalidate>
+                <div class="form-group">
+                  <div class="label-with-action">
+                    <label for="mensagemLegenda">
+                      Texto da Mensagem: <span class="required-mark" aria-hidden="true">*</span>
+                    </label>
+                    <div class="tag-buttons">
+                      <button type="button" id="btn-inserir-nome" class="btn btn-small btn-secondary">
+                        + Inserir {primeiro_nome}
+                      </button>
+                      <button type="button" id="btn-inserir-nome-completo" class="btn btn-small btn-secondary">
+                        + Inserir {nome}
+                      </button>
+                    </div>
+                  </div>
+                  <span id="mensagemLegenda-hint" class="field-hint">
+                    Dica: Clique em <code>+ Inserir {primeiro_nome}</code> para que cada pessoa receba a mensagem com o próprio nome (ex: "Olá, Maria!").
+                  </span>
+                  <textarea
+                    id="mensagemLegenda"
+                    name="mensagemLegenda"
+                    rows="5"
+                    placeholder="Escreva aqui o comunicado, convite ou aviso que você deseja enviar..."
+                    aria-describedby="mensagemLegenda-hint mensagemLegenda-error"
+                    required
+                  ></textarea>
+                  <span id="mensagemLegenda-error" class="field-error" hidden>
+                    <span aria-hidden="true">❌</span> Escreva o texto da mensagem antes de continuar.
+                  </span>
+                </div>
+
+                <fieldset class="fieldset-box">
+                  <legend>Imagem ou Cartaz Informativo (Opcional)</legend>
+
+                  <div class="checkbox-row">
+                    <label for="enviarImagem" class="brand-checkbox-label">
+                      <input type="checkbox" id="enviarImagem" name="enviarImagem" class="visually-hidden">
+                      <span>Quero enviar uma imagem junto com a mensagem</span>
+                    </label>
+                  </div>
+
+                  <div id="painel-upload-imagem" class="image-upload-area" hidden>
+                    <div class="current-image-thumb" id="thumb-container" hidden>
+                      <img id="thumb-imagem-atual" src="" alt="Miniatura da imagem selecionada para envio" width="110" height="110">
+                    </div>
+                    <div class="image-upload-controls">
+                      <p class="image-status-name" id="nome-arquivo-imagem">Nenhuma imagem escolhida ainda.</p>
+                      <div class="image-buttons-row">
+                        <label for="input-upload-imagem" class="btn btn-secondary">
+                          Escolher Imagem do Computador...
+                        </label>
+                        <input type="file" id="input-upload-imagem" name="imagem" accept="image/jpeg,image/png,image/webp" class="visually-hidden">
+                        <button type="button" id="btn-remover-imagem" class="btn btn-small btn-outline-danger" hidden>
+                          Remover Imagem
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset class="fieldset-box">
+                  <legend>Pausa de Segurança Anti-Bloqueio (em segundos)</legend>
+                  <p class="field-hint">
+                    Para proteger seu WhatsApp contra bloqueios, o sistema espera um tempo aleatório entre cada envio. O ideal é manter entre <strong>25 e 45 segundos</strong>.
+                  </p>
+                  <div class="pause-inputs-grid">
+                    <div class="form-group">
+                      <label for="pausaMinima">Espera mínima (segundos):</label>
+                      <input
+                        type="text"
+                        inputmode="numeric"
+                        id="pausaMinima"
+                        name="pausaMinima"
+                        value="25"
+                        pattern="\d+"
+                        required
+                      >
+                    </div>
+                    <div class="form-group">
+                      <label for="pausaMaxima">Espera máxima (segundos):</label>
+                      <input
+                        type="text"
+                        inputmode="numeric"
+                        id="pausaMaxima"
+                        name="pausaMaxima"
+                        value="45"
+                        pattern="\d+"
+                        required
+                      >
+                    </div>
+                  </div>
+                </fieldset>
+
+                <div class="form-actions">
+                  <button type="submit" id="btn-salvar-config" class="btn btn-secondary">
+                    Salvar Rascunho da Mensagem
+                  </button>
+                  <span class="field-hint">O rascunho também é salvo automaticamente quando você envia um teste.</span>
+                </div>
+              </form>
+            </section>
+
+            <!-- ==================== ETAPA 4: TESTE E DISPARO ==================== -->
+            <section class="card card-highlight" id="etapa-4" aria-labelledby="step4-heading">
+              <div class="card-header">
+                <span class="step-badge">Etapa 4</span>
+                <h2 id="step4-heading">Testar e Iniciar o Disparo</h2>
+              </div>
+
+              <p class="helper-paragraph">
+                <strong>Passo 4.1 (Recomendado):</strong> Envie primeiro uma mensagem de teste para o seu próprio WhatsApp e confira no celular se o texto, os links e a imagem ficaram como você deseja.
+              </p>
+
+              <div class="test-send-box">
+                <div class="form-group">
+                  <label for="numeroTeste">Seu número para receber o Teste (com DDD):</label>
+                  <span id="numeroTeste-hint" class="field-hint">Exemplo fictício: <code>18999999999</code> ou <code>5518999999999</code></span>
+                  <div class="test-input-row">
+                    <input
+                      type="text"
+                      id="numeroTeste"
+                      name="numeroTeste"
+                      inputmode="numeric"
+                      autocomplete="tel"
+                      autocorrect="off"
+                      autocapitalize="none"
+                      spellcheck="false"
+                      placeholder="Ex: 5518999999999"
+                      aria-describedby="numeroTeste-hint"
+                    >
+                    <button type="button" id="btn-enviar-teste" class="btn btn-secondary">
+                      Enviar Teste para Mim Agora
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="section-divider">
+
+              <div class="final-launch-box">
+                <div>
+                  <h3>Passo 4.2 — Tudo conferido no teste?</h3>
+                  <p id="resumo-pronto-disparo">
+                    Você selecionou <strong id="contador-selecionados-final">0</strong> contato(s) para receber esta mensagem.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  id="btn-abrir-modal-disparo"
+                  class="btn btn-primary btn-large"
+                  command="show-modal"
+                  commandfor="confirm-disparo-dialog"
+                >
+                  Revisar e Iniciar Disparo
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <!-- ==================== COLUNA LATERAL: PRÉ-VISUALIZAÇÃO E PROGRESSO ==================== -->
+          <aside class="sidebar-column" aria-label="Pré-visualização e Progresso do Disparo">
+            <div class="sticky-sidebar">
+              <!-- Simulador Visual da Mensagem no WhatsApp -->
+              <section class="card preview-card" aria-labelledby="preview-heading">
+                <h2 id="preview-heading">Prévia no Celular</h2>
+                <p class="field-hint">Veja em tempo real como a pessoa receberá sua mensagem:</p>
+                <div class="wa-phone-mockup">
+                  <div class="wa-phone-header">
+                    <div class="wa-avatar" aria-hidden="true">IF</div>
+                    <div>
+                      <div class="wa-contact-title">Contato da sua Lista</div>
+                      <div class="wa-contact-sub">online</div>
+                    </div>
+                  </div>
+                  <div class="wa-chat-area">
+                    <div class="wa-bubble">
+                      <div id="preview-image-wrapper" class="wa-bubble-img" hidden>
+                        <img id="preview-bubble-img" src="" alt="Prévia da imagem anexada na mensagem">
+                      </div>
+                      <div id="preview-bubble-text" class="wa-bubble-text"></div>
+                      <div class="wa-bubble-time">12:00 ✓✓</div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Painel de Progresso em Tempo Real -->
+              <section class="card progress-card" aria-labelledby="progress-heading">
+                <div class="progress-title-row">
+                  <h2 id="progress-heading">Acompanhamento do Envio</h2>
+                  <span id="badge-status-disparo" class="dispatch-badge" data-status="idle">Aguardando</span>
+                </div>
+
+                <div class="progress-bar-block">
+                  <div class="progress-labels">
+                    <label for="barra-progresso-envio" id="label-progresso-texto">Progresso: 0 de 0</label>
+                    <span id="porcentagem-progresso">0%</span>
+                  </div>
+                  <progress id="barra-progresso-envio" max="100" value="0">0%</progress>
+                </div>
+
+                <div id="timer-pausa-box" class="pause-countdown-banner" hidden>
+                  <span aria-hidden="true">⏳</span>
+                  <span>Pausa de segurança: próximo envio em <strong id="timer-segundos">0</strong>s...</span>
+                </div>
+
+                <div class="stats-grid">
+                  <div class="stat-item stat-success">
+                    <span class="stat-label"><span aria-hidden="true">✅</span> Enviados</span>
+                    <strong class="stat-value" id="stat-sucesso">0</strong>
+                  </div>
+                  <div class="stat-item stat-warn">
+                    <span class="stat-label"><span aria-hidden="true">⚠️</span> Sem Whats</span>
+                    <strong class="stat-value" id="stat-ignorados">0</strong>
+                  </div>
+                  <div class="stat-item stat-error">
+                    <span class="stat-label"><span aria-hidden="true">❌</span> Falhas</span>
+                    <strong class="stat-value" id="stat-falhas">0</strong>
+                  </div>
+                </div>
+
+                <div id="controles-disparo-ativo" class="active-dispatch-controls" hidden>
+                  <button type="button" id="btn-pausar-disparo" class="btn btn-secondary">
+                    Pausar Envio
+                  </button>
+                  <button type="button" id="btn-cancelar-disparo" class="btn btn-outline-danger">
+                    Cancelar Disparo
+                  </button>
+                </div>
+
+                <div class="log-section">
+                  <div class="log-header">
+                    <h3>Histórico de Atividades</h3>
+                    <button type="button" id="btn-baixar-relatorio" class="btn btn-small btn-secondary">
+                      Baixar Relatório (.CSV)
+                    </button>
+                  </div>
+                  <ul id="lista-logs" class="log-list" aria-label="Registros de envio">
+                    <li class="log-item log-info">
+                      <span class="log-icon" aria-hidden="true">ℹ️</span>
+                      <div class="log-body">
+                        <span class="log-time">Agora</span>
+                        <span class="log-msg">Painel pronto. Siga as etapas 1 a 4 para realizar seus envios.</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </section>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         ABA 2: GUIA PASSO A PASSO E DÚVIDAS (CONSULTA DETALHADA PARA LEIGOS)
+         ====================================================================== -->
+    <div id="panel-ajuda" role="tabpanel" aria-labelledby="tab-ajuda" hidden="until-found">
+      <div class="panel-inner guide-container">
+        <section class="card guide-hero" aria-labelledby="guide-main-title">
+          <div class="guide-hero-top">
+            <div>
+              <span class="step-badge">Manual de Consulta</span>
+              <h2 id="guide-main-title">Guia Completo Passo a Passo e Dúvidas Frequentes</h2>
+              <p class="helper-paragraph">
+                Este manual foi escrito especialmente para quem <strong>não é da área de computação</strong>. Aqui você encontra explicações bem calmas e detalhadas sobre o que é a planilha, como preparar os contatos, conectar o WhatsApp e resolver qualquer imprevisto.
+              </p>
+            </div>
+            <div class="guide-quick-actions">
+              <a href="/api/planilha/modelo" download class="btn btn-primary">
+                ⬇️ Baixar Planilha Modelo Pronta (.CSV)
+              </a>
+              <button type="button" id="btn-voltar-painel" class="btn btn-secondary">
+                ← Voltar para o Painel de Disparo
+              </button>
+            </div>
+          </div>
+
+          <div class="guide-tip-callout">
+            <span aria-hidden="true">💡</span>
+            <div>
+              <strong>Dica de leitura:</strong> Você pode abrir vários tópicos ao mesmo tempo clicando nos títulos abaixo — ou clicar no botão <em>"Abrir todos os tópicos"</em> se preferir ler tudo de uma vez (ou imprimir esta página com <kbd>Ctrl</kbd> + <kbd>P</kbd>).
+            </div>
+          </div>
+        </section>
+
+        <section class="card guide-accordion-card accordion" id="guia-accordion" aria-labelledby="guide-topics-heading">
+          <div class="accordion-header-row">
+            <h2 id="guide-topics-heading">Tópicos do Manual</h2>
+            <button
+              type="button"
+              id="btn-toggle-all-faq"
+              class="btn btn-secondary btn-small"
+              commandfor="guia-accordion"
+              command="--toggle-all"
+              aria-expanded="false"
+            >
+              <span class="expand">Abrir todos os tópicos</span>
+              <span class="collapse">Recolher todos os tópicos</span>
+            </button>
+          </div>
+
+          <!-- TÓPICO 1: O QUE É A PLANILHA E COMO MONTAR -->
+          <details id="guia-planilha" open>
+            <summary>1. O que é a Planilha de Contatos e como montar a sua do zero?</summary>
+            <div class="accordion-content">
+              <p>
+                A <strong>planilha de contatos</strong> é simplesmente uma tabela (como no Google Planilhas ou no Microsoft Excel) onde cada <strong>linha</strong> representa uma pessoa que vai receber sua mensagem, e cada <strong>coluna</strong> guarda uma informação sobre ela.
+              </p>
+              <p>
+                Você só precisa de <strong>duas colunas obrigatórias</strong> (e uma terceira opcional chamada <em>Status</em>):
+              </p>
+
+              <!-- Ilustração visual de como a planilha deve ficar -->
+              <div class="sheet-mockup-box">
+                <p class="sheet-mockup-caption">Exemplo visual de como sua planilha deve ficar:</p>
+                <div class="sheet-grid-scroll">
+                  <table class="sheet-example-table">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="sheet-row-num" aria-label="Linha"></th>
+                        <th scope="col">Coluna A</th>
+                        <th scope="col">Coluna B</th>
+                        <th scope="col">Coluna C (Opcional)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="sheet-header-row">
+                        <th scope="row" class="sheet-row-num">1</th>
+                        <td><strong>Nome</strong></td>
+                        <td><strong>WhatsApp</strong></td>
+                        <td><strong>Status</strong></td>
+                      </tr>
+                      <tr>
+                        <th scope="row" class="sheet-row-num">2</th>
+                        <td>Prof. Maria Oliveira</td>
+                        <td>5518999991111</td>
+                        <td>Pendente</td>
+                      </tr>
+                      <tr>
+                        <th scope="row" class="sheet-row-num">3</th>
+                        <td>João Pedro Santos</td>
+                        <td>(18) 99999-2222</td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <th scope="row" class="sheet-row-num">4</th>
+                        <td>Ana Costa</td>
+                        <td>5518999993333</td>
+                        <td>enviado</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <ul class="guide-checklist">
+                <li><strong>Primeira linha (Cabeçalho):</strong> Escreva os títulos <code>Nome</code>, <code>WhatsApp</code> e (se quiser) <code>Status</code>. O programa reconhece esses títulos automaticamente, mesmo que sua planilha já tenha outras colunas no meio (como E-mail, Campus ou Curso)!</li>
+                <li><strong>Como digitar o telefone:</strong> Não precisa ter medo de parênteses ou tracinhos! Você pode escrever <code>(18) 99999-2222</code>, <code>18999992222</code> ou <code>5518999992222</code>. O sistema limpa os símbolos e coloca o código do Brasil (<code>55</code>) sozinho se faltar. <strong>Só não esqueça o DDD</strong> (os 2 dígitos da região, como 18, 11, 16...).</li>
+                <li><strong>Para que serve a coluna "Status"?</strong> Se você escrever a palavra <code>enviado</code> na linha de uma pessoa, o sistema já deixa essa pessoa <em>desmarcada</em> para você não enviar a mesma mensagem duas vezes sem querer.</li>
+              </ul>
+
+              <p>
+                <strong>Quer um atalho?</strong> Clique no botão <a href="/api/planilha/modelo" download>Baixar Planilha Modelo Pronta (.CSV)</a>, abra o arquivo no Excel ou envie para o Google Planilhas e troque os nomes de exemplo pelos seus contatos!
+              </p>
+            </div>
+          </details>
+
+          <!-- TÓPICO 2: GOOGLE PLANILHAS PASSO A PASSO -->
+          <details id="guia-google-sheets">
+            <summary>2. Passo a passo: Como liberar o link do Google Planilhas (O detalhe mais importante!)</summary>
+            <div class="accordion-content">
+              <p>
+                Por segurança do Google, toda planilha nova nasce <strong>trancada (Privada)</strong>. Se você apenas copiar o link sem destrancar a visualização, o painel avisará que não conseguiu ler os contatos. Siga estes 6 passos exatos:
+              </p>
+              <ol class="guide-steps-ol">
+                <li>Abra a sua planilha no <strong>Google Planilhas</strong> (pelo navegador no computador).</li>
+                <li>Olhe para o <strong>canto superior direito</strong> da tela e clique no botão grande chamado <strong>"Compartilhar"</strong> (geralmente com um cadeado).</li>
+                <li>Na janelinha que abrir, procure a parte escrita <strong>"Acesso geral"</strong>.</li>
+                <li>Clique onde está escrito <strong>"Restrito"</strong> e mude para <strong>"Qualquer pessoa com o link"</strong>.</li>
+                <li>Ao lado, deixe marcado como <strong>"Leitor"</strong> (ninguém vai conseguir apagar sua planilha, apenas ler os contatos).</li>
+                <li>Clique em <strong>"Copiar link"</strong> e depois no botão <strong>"Concluído"</strong>.</li>
+              </ol>
+              <div class="guide-callout-warn">
+                <span aria-hidden="true">📌</span>
+                <div>
+                  <strong>Pronto!</strong> Agora volte para a aba <strong>Painel de Disparo</strong>, cole esse link na <strong>Etapa 2</strong> e clique no botão verde <strong>"Carregar Contatos da Planilha Google"</strong>. A lista de nomes aparecerá logo abaixo para você conferir!
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- TÓPICO 3: EXCEL / LIBREOFFICE (.CSV) -->
+          <details id="guia-excel-csv">
+            <summary>3. Prefere usar Excel ou LibreOffice no computador? Como salvar em .CSV</summary>
+            <div class="accordion-content">
+              <p>
+                Se você não usa Google Planilhas e já tem sua lista salva no <strong>Microsoft Excel</strong> ou no <strong>LibreOffice Calc</strong> do seu computador, basta salvar uma cópia no formato <code>.CSV</code>:
+              </p>
+              <ol class="guide-steps-ol">
+                <li>Abra sua planilha no Excel normalmente.</li>
+                <li>Clique em <strong>Arquivo</strong> (no canto superior esquerdo) &gt; <strong>Salvar Como</strong>.</li>
+                <li>Onde está escrito <em>"Tipo"</em> (embaixo do nome do arquivo), clique e escolha <strong>"CSV UTF-8 (Delimitado por vírgulas) (*.csv)"</strong> ou <strong>"CSV (separado por vírgulas)"</strong>.</li>
+                <li>Clique em <strong>Salvar</strong> (se o Excel perguntar se deseja manter esse formato, clique em <em>Sim</em>).</li>
+                <li>Volte aqui no <strong>Painel de Disparo</strong>, na <strong>Etapa 2</strong>, clique no botão <strong>"Ou Abrir Arquivo (.CSV) do Computador"</strong> e selecione o arquivo que você acabou de salvar.</li>
+              </ol>
+              <p class="field-hint">
+                Nota: O sistema foi preparado para o padrão brasileiro do Excel (que separa colunas com ponto-e-vírgula <code>;</code>) e também para o padrão internacional (vírgula <code>,</code>).
+              </p>
+            </div>
+          </details>
+
+          <!-- TÓPICO 4: CONECTAR WHATSAPP -->
+          <details id="guia-conectar-whatsapp">
+            <summary>4. Passo a passo: Como conectar o seu celular (WhatsApp) com segurança</summary>
+            <div class="accordion-content">
+              <p>
+                Para enviar mensagens pelo seu número, o painel funciona exatamente como o <strong>WhatsApp Web</strong>: o seu celular autoriza o painel a enviar as mensagens em seu nome.
+              </p>
+              <p><strong>Opção A — Usando o Código de 8 caracteres (Mais fácil):</strong></p>
+              <ol class="guide-steps-ol">
+                <li>Na <strong>Etapa 1</strong> do painel, digite o número do seu WhatsApp com DDD (ex: <code>18999999999</code>) e clique em <strong>"Gerar Código para Conectar WhatsApp"</strong>.</li>
+                <li>Aguarde cerca de 3 a 5 segundos até aparecer um código grande em destaque na tela (exemplo: <code>ABCD-1234</code>).</li>
+                <li>Pegue o seu celular e abra o <strong>WhatsApp</strong>.</li>
+                <li>
+                  Abra o menu de aparelhos conectados:
+                  <ul>
+                    <li><strong>No Android:</strong> toque nos <strong>3 pontinhos (⋮)</strong> no canto superior direito &gt; <strong>Aparelhos conectados</strong>.</li>
+                    <li><strong>No iPhone:</strong> toque em <strong>Configurações</strong> (engrenagem no canto inferior direito) &gt; <strong>Aparelhos conectados</strong>.</li>
+                  </ul>
+                </li>
+                <li>Toque no botão verde <strong>"Conectar um aparelho"</strong>.</li>
+                <li>Em vez de apontar a câmera, toque no texto lá embaixo escrito <strong>"Conectar com número de telefone"</strong> e digite o código que apareceu na tela do computador.</li>
+              </ol>
+
+              <p><strong>Opção B — Usando o QR Code (Câmera):</strong></p>
+              <p>
+                Se preferir, marque a opção <em>"QR Code na tela"</em> na Etapa 1, clique em gerar e aponte a câmera do celular em <em>Aparelhos conectados &gt; Conectar um aparelho</em>.
+              </p>
+
+              <div class="guide-callout-warn">
+                <span aria-hidden="true">🔒</span>
+                <div>
+                  <strong>Privacidade em computadores ou links compartilhados:</strong> Quando terminar todos os seus envios, clique no botão <strong>"Desconectar / Trocar Celular"</strong> na Etapa 1. Isso remove a conexão do seu WhatsApp imediatamente para que o próximo professor possa conectar o celular dele.
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- TÓPICO 5: MENSAGENS, IMAGENS E PAUSAS -->
+          <details id="guia-mensagens-seguranca">
+            <summary>5. Como escrever mensagens personalizadas, enviar imagens e evitar bloqueios</summary>
+            <div class="accordion-content">
+              <ul class="guide-checklist">
+                <li>
+                  <strong>Personalização com o nome da pessoa:</strong> Se você escrever <code>Olá, {primeiro_nome}! Tudo bem?</code> na caixa da Etapa 3, o painel substitui automaticamente para cada pessoa da planilha — a Maria recebe <em>"Olá, Maria! Tudo bem?"</em> e o João recebe <em>"Olá, João! Tudo bem?"</em>. Além de mais acolhedor, isso ajuda o WhatsApp a ver que não é uma mensagem robótica repetida!
+                </li>
+                <li>
+                  <strong>Sempre faça o Envio de Teste (Etapa 4.1):</strong> Antes de mandar para toda a turma ou rede, digite seu próprio número na Etapa 4 e clique em <strong>"Enviar Teste para Mim Agora"</strong>. Confira no celular se o link abre direitinho e se a imagem ficou nítida.
+                </li>
+                <li>
+                  <strong>Por que existe a pausa de 25 a 45 segundos?</strong> O WhatsApp monitora contas que mandam dezenas de mensagens no mesmo segundo e pode suspender temporariamente o chip. Esperar entre 25 e 45 segundos aleatórios imita uma pessoa enviando manualmente com calma e protege o seu número.
+                </li>
+                <li>
+                  <strong>Mantenha o painel aberto durante o disparo:</strong> Se a lista tiver 30 contatos, o envio levará cerca de 15 a 20 minutos. Você pode ir tomando um café enquanto acompanha a barra verde subir — só não feche a janela do programa antes de aparecer <strong>"✅ Concluído"</strong>.
+                </li>
+              </ul>
+            </div>
+          </details>
+
+          <!-- TÓPICO 6: DÚVIDAS FREQUENTES E PROBLEMAS -->
+          <details id="guia-problemas">
+            <summary>6. Dúvidas Frequentes e Resolução de Problemas</summary>
+            <div class="accordion-content">
+              <dl class="faq-dl">
+                <dt>❌ Apareceu o erro "Sua planilha do Google está PRIVADA!"</dt>
+                <dd>
+                  Isso significa que faltou liberar o acesso de leitura. Abra o tópico <strong>"2. Como liberar o link do Google Planilhas"</strong> acima, clique em <em>Compartilhar</em> na planilha e mude de <em>Restrito</em> para <em>Qualquer pessoa com o link</em>.
+                </dd>
+
+                <dt>⚠️ Um contato apareceu como "Sem WhatsApp" no acompanhamento</dt>
+                <dd>
+                  Antes de enviar, o sistema pergunta ao WhatsApp se aquele número existe. Se o contato estiver sem o DDD, sem o dígito 9 (em celulares) ou for telefone fixo sem WhatsApp, o sistema pula com segurança para não travar o resto da fila.
+                </dd>
+
+                <dt>🌐 A internet caiu ou fechei a aba no meio do disparo. E agora?</dt>
+                <dd>
+                  Clique em <strong>"Baixar Relatório (.CSV)"</strong> no painel de acompanhamento para ver exatamente quem já recebeu (<code>enviado</code>) e quem ainda ficou pendente. Depois, na tabela da Etapa 2, você pode desmarcar quem já recebeu e continuar apenas para os restantes.
+                </dd>
+
+                <dt>📱 Preciso deixar o celular com a tela acesa durante todo o envio?</dt>
+                <dd>
+                  Não precisa deixar a tela acesa, mas é importante que o celular tenha acesso à internet (Wi-Fi ou dados móveis) funcionando normalmente.
+                </dd>
+
+                <dt>💻 Como abrir o programa no meu computador sem usar código ou VS Code?</dt>
+                <dd>
+                  Dentro da pasta do projeto existem dois atalhos prontos: dê dois cliques em <strong><code>iniciar-painel.bat</code></strong> (se usar Windows) ou <strong><code>iniciar-painel.sh</code></strong> (se usar Linux). O navegador abrirá automaticamente na tela do painel! (É necessário apenas ter o <em>Node.js</em> instalado no computador uma única vez.)
+                </dd>
+              </dl>
+            </div>
+          </details>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal Nativo <dialog> de Confirmação antes do Disparo em Massa -->
+  <dialog id="confirm-disparo-dialog" aria-labelledby="confirm-dialog-title" closedby="any">
+    <h1 id="confirm-dialog-title">Confirmar Início do Disparo?</h1>
+    <p id="confirm-dialog-desc">
+      Você está prestes a enviar sua mensagem para <strong id="modal-total-contatos">0</strong> pessoa(s) marcada(s) na lista.
+    </p>
+    <ul class="modal-checklist">
+      <li><strong>Intervalo de segurança:</strong> <span id="modal-resumo-pausa">25 a 45 segundos</span> entre cada mensagem.</li>
+      <li><strong>Anexo de imagem:</strong> <span id="modal-resumo-imagem">Não (apenas texto)</span>.</li>
+    </ul>
+    <form method="dialog" class="dialog-actions">
+      <button value="cancel" class="btn btn-secondary" autofocus>Voltar e Revisar</button>
+      <button value="confirm" id="btn-confirmar-disparo-modal" class="btn btn-primary">
+        Sim, Iniciar Envios Agora
+      </button>
+    </form>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>
+        <strong>Rede IF EcoSol</strong> • Ferramenta de Comunicação Solidária e Acessível
+      </p>
+      <p class="footer-note">
+        Desenvolvido para uso simplificado por docentes, bolsistas e membros da rede.
+      </p>
+    </div>
+  </footer>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
